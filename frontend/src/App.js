@@ -1,0 +1,57 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { Box } from '@mui/material';
+import Navbar from './components/Navbar';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import Home from './pages/Home';
+import { CartProvider } from './context/CartContext';
+import PlanDetail from './pages/PlanDetail';
+import { ThemeProvider } from './context/ThemeContext';
+import CssBaseline from '@mui/material/CssBaseline';
+import Cart from './pages/Cart';
+import StemCellBanking from './pages/StemCellBanking';
+import CordBlood from './pages/CordBlood';
+import CordLining from './pages/CordLining';
+import YourPlans from './pages/YourPlans';
+import Payment from './pages/Payment';
+import WhatsAppButton from './components/WhatsAppButton';
+
+const App = () => {
+    return (
+        <ThemeProvider>
+            <CssBaseline />
+            <AuthProvider>
+                <CartProvider>
+                    <Router>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+                            <Navbar />
+                            {/* Add margin-top to account for fixed navbar */}
+                            <Box sx={{ mt: '64px' }}>
+                                <Routes>
+                                    <Route path="/login" element={<Login />} />
+                                    <Route path="/register" element={<Register />} />
+                                    <Route path="/dashboard" element={<Dashboard />} />
+                                    <Route path="/home" element={<Home />} />
+                                    <Route path="/" element={<Navigate to="/home" replace />} />
+                                    <Route path="/plan/:planId" element={<PlanDetail />} />
+                                    <Route path="/cart" element={<Cart />} />
+                                    <Route path="/stem-cell-banking" element={<StemCellBanking />} />
+                                    <Route path="/stem-cell-banking/cord-blood" element={<CordBlood />} />
+                                    <Route path="/stem-cell-banking/cord-lining" element={<CordLining />} />
+                                    <Route path="/your-plans" element={<YourPlans />} />
+                                    <Route path="/payment" element={<Payment />} />
+                                </Routes>
+                            </Box>
+                            <WhatsAppButton />
+                        </Box>
+                    </Router>
+                </CartProvider>
+            </AuthProvider>
+        </ThemeProvider>
+    );
+};
+
+export default App; 

@@ -1,0 +1,26 @@
+stem-cell-banking/
+├── backend/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/
+│   │   │   │   └── com/
+│   │   │   │       └── stemcell/
+│   │   │   │           ├── controller/
+│   │   │   │           ├── model/
+│   │   │   │           ├── repository/
+│   │   │   │           ├── service/
+│   │   │   │           ├── config/
+│   │   │   │           ├── security/
+│   │   │   │           └── dto/
+│   │   │   └── resources/
+│   │   │       └── application.properties
+│   └── pom.xml
+└── frontend/
+    ├── public/
+    ├── src/
+    │   ├── components/
+    │   ├── pages/
+    │   ├── services/
+    │   ├── assets/
+    │   └── styles/
+    └── package.json 
