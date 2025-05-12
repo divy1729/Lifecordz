@@ -86,8 +86,13 @@ export const AuthProvider = ({ children }) => {
         }
     }, []);
 
+    // Add a getToken function to centralize token retrieval
+    const getToken = () => {
+        return localStorage.getItem('token');
+    };
+
     return (
-        <AuthContext.Provider value={{ user, token, login, register, logout, verifyOtp }}>
+        <AuthContext.Provider value={{ user, token, login, register, logout, verifyOtp, getToken }}>
             {children}
         </AuthContext.Provider>
     );
@@ -99,4 +104,4 @@ export const useAuth = () => {
         throw new Error('useAuth must be used within an AuthProvider');
     }
     return context;
-}; 
+};

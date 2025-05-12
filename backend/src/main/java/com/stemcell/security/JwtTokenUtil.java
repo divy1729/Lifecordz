@@ -64,4 +64,13 @@ public class JwtTokenUtil {
             .getBody()
             .get("role", String.class);
     }
+
+    public String getUserIdFromToken(String token) {
+        return Jwts.parserBuilder()
+            .setSigningKey(getSigningKey())
+            .build()
+            .parseClaimsJws(token)
+            .getBody()
+            .get("userId", String.class);
+    }
 }

@@ -15,8 +15,12 @@ import {
     Drawer,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
+import authService from '../services/authService';
 
 const AddressDialog = ({ open, onClose, onSubmit }) => {
+    const { user } = useAuth();
     const [addressInfo, setAddressInfo] = useState({
         firstName: '',
         lastName: '',
@@ -43,10 +47,30 @@ const AddressDialog = ({ open, onClose, onSubmit }) => {
         }));
     };
 
-    const handleSubmit = () => {
-        onSubmit(addressInfo);
-        onClose();
+    const saveAddress = async () => {
+        try {
+            if (!user) {
+                onClose();
+                // Optionally redirect to login or show message
+                return;
+            }
+            
+            // Ensure to retrieve token from the context or wherever you store it
+            const token = authService.getToken(); // Use token from context
+            
+            await axios.put(`/api/users/${user.id}/address`, addressInfo, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Use token from context
+                },
+            });
+            
+            onSubmit(addressInfo);
+            onClose();
+        } catch (error) {
+            console.error('Failed to save address:', error);
+        }
     };
+    
 
     const isFormValid = () => {
         return addressInfo.firstName &&
@@ -148,7 +172,7 @@ const AddressDialog = ({ open, onClose, onSubmit }) => {
                     <Button onClick={onClose}>Cancel</Button>
                     <Button
                         variant="contained"
-                        onClick={handleSubmit}
+                        onClick={saveAddress}
                         disabled={!isFormValid()}
                     >
                         Proceed to Checkout
@@ -159,4 +183,4 @@ const AddressDialog = ({ open, onClose, onSubmit }) => {
     );
 };
 
-export default AddressDialog; 
+export default AddressDialog;

@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.stemcell.security.CustomUserDetails; // Update to the correct package path for CustomUserDetails
+
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -31,15 +33,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
+            System.out.println("Authorization Header: " + request.getHeader("Authorization"));
+            System.out.println("Request URI: " + request.getRequestURI());
+            
             String jwt = parseJwt(request);
             if (jwt != null && jwtTokenUtil.validateToken(jwt)) {
                 String username = jwtTokenUtil.getUsernameFromToken(jwt);
                 String role = jwtTokenUtil.getRoleFromToken(jwt);
+                String userId = jwtTokenUtil.getUserIdFromToken(jwt); // Assuming a method to extract user ID from token
 
                 List<GrantedAuthority> authorities = new ArrayList<>();
                 authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
 
-                UserDetails userDetails = new User(
+                CustomUserDetails userDetails = new CustomUserDetails(
+                    userId,
                     username,
                     "", // Empty password since we're not using it
                     authorities
@@ -53,6 +60,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                System.out.println("JWT Token Validated: " + jwt);
+                
+                if (request.getRequestURI().equals("/api/payment/create-order")) {
+                    System.out.println("JWT Token for /api/payment/create-order: " + jwt);
+                }
+            } else {
+                System.out.println("Invalid or Missing JWT Token");
             }
         } catch (Exception e) {
             logger.error("Cannot set user authentication: {}", e);

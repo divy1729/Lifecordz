@@ -7,11 +7,17 @@ const api = axios.create({
   baseURL: 'http://localhost:8080/api'
 });
 
-// Add request interceptor to inject token
-api.interceptors.request.use(config => {
+// Centralize token retrieval
+const getToken = () => {
   const user = JSON.parse(localStorage.getItem('user'));
-  if (user?.token) {
-    config.headers.Authorization = `Bearer ${user.token}`;
+  return user?.token || null;
+};
+
+// Update axios interceptor to use centralized token retrieval
+api.interceptors.request.use(config => {
+  const token = getToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 }, error => {
@@ -85,6 +91,7 @@ const authService = {
   resendOtp,
   logout,
   getCurrentUser,
+  getToken,
 };
 
-export default authService; 
+export default authService;

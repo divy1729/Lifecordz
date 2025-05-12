@@ -53,9 +53,8 @@ const Cart = () => {
     };
 
     const handleAddressSubmit = (addressInfo) => {
-        setOrderInfo(prev => ({ ...prev, addressInfo }));
-        // Navigate to payment page or open payment dialog
-        navigate('/payment', { state: { orderInfo: { ...orderInfo, addressInfo } } });
+        setOrderInfo(prev => ({ ...prev, addressInfo, amount: grandTotal }));
+        navigate('/payment', { state: { orderInfo: { ...orderInfo, addressInfo, amount: grandTotal } } });
     };
 
     // Empty Cart View
@@ -271,4 +270,4 @@ const Cart = () => {
     );
 };
 
-export default Cart; 
+export default Cart;

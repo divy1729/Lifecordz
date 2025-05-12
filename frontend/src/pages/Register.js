@@ -76,10 +76,8 @@ const Register = () => {
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8081/api/auth/verify-otp", {
+      const response = await fetch(`http://localhost:8081/api/auth/verify-otp?email=${encodeURIComponent(formData.email)}&otp=${encodeURIComponent(otp)}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: formData.email, otp }),
       });
 
       if (!response.ok) {

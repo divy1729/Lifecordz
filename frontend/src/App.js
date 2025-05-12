@@ -18,6 +18,12 @@ import CordLining from './pages/CordLining';
 import YourPlans from './pages/YourPlans';
 import Payment from './pages/Payment';
 import WhatsAppButton from './components/WhatsAppButton';
+import ProtectedRoute from './components/ProtectedRoute';
+import AdminDashboard from './pages/AdminDashboard';
+import DoctorDashboard from './pages/DoctorDashboard';
+import TechnicianDashboard from './pages/TechnicianDashboard';
+import SupportDashboard from './pages/SupportDashboard';
+import CourierDashboard from './pages/CourierDashboard';
 
 const App = () => {
     return (
@@ -34,6 +40,31 @@ const App = () => {
                                     <Route path="/login" element={<Login />} />
                                     <Route path="/register" element={<Register />} />
                                     <Route path="/dashboard" element={<Dashboard />} />
+                                    <Route path="/admin-dashboard" element={
+                                        <ProtectedRoute requiredRole="ADMIN">
+                                            <AdminDashboard />
+                                        </ProtectedRoute>
+                                    } />
+                                    <Route path="/doctor-dashboard" element={
+                                        <ProtectedRoute requiredRole="DOCTOR">
+                                            <DoctorDashboard />
+                                        </ProtectedRoute>
+                                    } />
+                                    <Route path="/technician-dashboard" element={
+                                        <ProtectedRoute requiredRole="TECHNICIAN">
+                                            <TechnicianDashboard />
+                                        </ProtectedRoute>
+                                    } />
+                                    <Route path="/support-dashboard" element={
+                                        <ProtectedRoute requiredRole="SUPPORT">
+                                            <SupportDashboard />
+                                        </ProtectedRoute>
+                                    } />
+                                    <Route path="/courier-dashboard" element={
+                                        <ProtectedRoute requiredRole="COURIER">
+                                            <CourierDashboard />
+                                        </ProtectedRoute>
+                                    } />
                                     <Route path="/home" element={<Home />} />
                                     <Route path="/" element={<Navigate to="/home" replace />} />
                                     <Route path="/plan/:planId" element={<PlanDetail />} />
@@ -54,4 +85,4 @@ const App = () => {
     );
 };
 
-export default App; 
+export default App;

@@ -18,10 +18,13 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import authService from '../services/authService';
 
 const BirthInfoDialog = ({ open, onClose, onSubmit }) => {
     const { user } = useAuth();
     const navigate = useNavigate();
+    const { token } = useAuth(); // Retrieve token from AuthContext
     const [birthInfo, setBirthInfo] = useState({
         expectedDeliveryDate: '',
         deliveryCity: '',
@@ -29,6 +32,9 @@ const BirthInfoDialog = ({ open, onClose, onSubmit }) => {
         doctor: '',
         consentToDonate: false
     });
+
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const hospitals = [
         "Goodwill Hospital And Maternity Home",
@@ -52,18 +58,37 @@ const BirthInfoDialog = ({ open, onClose, onSubmit }) => {
         }));
     };
 
-    const handleSubmit = () => {
-        if (!user) {
-            onClose();
-            navigate('/login', { 
-                state: { 
-                    returnTo: '/cart',
-                    birthInfo: birthInfo 
-                } 
-            });
-            return;
+    const saveBirthInfo = async () => {
+        setLoading(true);
+        setError('');
+        try {
+            if (!user) {
+                onClose();
+                navigate('/login', {
+                    state: {
+                        returnTo: '/cart',
+                        birthInfo: birthInfo
+                    }
+                });
+                return;
+            }
+            await axios.put(`/api/users/${user.id}/birth-info`, birthInfo, {
+                headers: {
+                  Authorization: `Bearer ${authService.getToken()}`, // Use token from context
+                },
+              });
+            onSubmit(birthInfo);
+        } catch (error) {
+            console.error('Failed to save birth info:', error);
+            setError('Failed to save birth info. Please try again.');
+        } finally {
+            setLoading(false);
         }
-        onSubmit(birthInfo);
+    };
+    
+
+    const handleSubmit = () => {
+        saveBirthInfo();
     };
 
     return (
@@ -159,4 +184,4 @@ const BirthInfoDialog = ({ open, onClose, onSubmit }) => {
     );
 };
 
-export default BirthInfoDialog; 
+export default BirthInfoDialog;
