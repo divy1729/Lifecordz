@@ -19,7 +19,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import authService from '../services/authService';
 
 const BirthInfoDialog = ({ open, onClose, onSubmit }) => {
     const { user } = useAuth();
@@ -74,7 +73,7 @@ const BirthInfoDialog = ({ open, onClose, onSubmit }) => {
             }
             await axios.put(`/api/users/${user.id}/birth-info`, birthInfo, {
                 headers: {
-                  Authorization: `Bearer ${authService.getToken()}`, // Use token from context
+                  Authorization: `Bearer ${token}`,
                 },
               });
             onSubmit(birthInfo);

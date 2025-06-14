@@ -17,10 +17,9 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
-import authService from '../services/authService';
 
 const AddressDialog = ({ open, onClose, onSubmit }) => {
-    const { user } = useAuth();
+    const { user, getToken } = useAuth();
     const [addressInfo, setAddressInfo] = useState({
         firstName: '',
         lastName: '',
@@ -54,16 +53,13 @@ const AddressDialog = ({ open, onClose, onSubmit }) => {
                 // Optionally redirect to login or show message
                 return;
             }
-            
-            // Ensure to retrieve token from the context or wherever you store it
-            const token = authService.getToken(); // Use token from context
-            
+            // Retrieve token from context
+            const token = getToken();
             await axios.put(`/api/users/${user.id}/address`, addressInfo, {
                 headers: {
-                    Authorization: `Bearer ${token}`, // Use token from context
+                    Authorization: `Bearer ${token}`,
                 },
             });
-            
             onSubmit(addressInfo);
             onClose();
         } catch (error) {

@@ -12,6 +12,7 @@ import {
 import { GradientHeading } from '../components/StyledHeadings';
 import axios from 'axios';
 import authService from '../services/authService';
+import { useAuth } from '../context/AuthContext';
 
 const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -26,12 +27,10 @@ const loadRazorpayScript = () => {
 const Payment = () => {
     const location = useLocation();
     const orderInfo = location.state?.orderInfo || { amount: 0, userId: '', email: '', phone: '' };
-
-    console.log('Order Info:', orderInfo); // Debug log to check the value of orderInfo
-
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
+    const { token, user } = useAuth();
 
     const handlePayment = async () => {
         setLoading(true);
@@ -39,20 +38,17 @@ const Payment = () => {
         setSuccess(null);
 
         const res = await loadRazorpayScript();
-
         if (!res) {
             setError('Failed to load Razorpay SDK. Please check your internet connection.');
             setLoading(false);
             return;
         }
-
         try {
             // Create order in backend with status pending
-            const token = authService.getToken();
             const orderResponse = await axios.post(
                 '/api/orders',
                 {
-                    userId: orderInfo?.userId,
+                    userId: user.id, // Use logged-in user's id
                     amount: orderInfo?.amount,
                     status: 'pending',
                     paymentDetails: {}
@@ -63,10 +59,7 @@ const Payment = () => {
                     }
                 }
             );
-            
-
             const createdOrder = orderResponse.data;
-
             // Create Razorpay order
             const razorpayOrderResponse = await axios.post('/api/payment/create-order', {
                 amount: orderInfo?.amount * 100, // amount in paise
@@ -74,12 +67,10 @@ const Payment = () => {
                 receipt: createdOrder.id
             }, {
                 headers: {
-                    Authorization: `Bearer ${authService.getToken()}`,
+                    Authorization: `Bearer ${token}`,
                 }
             });
-
             const razorpayOrderData = razorpayOrderResponse.data;
-
             const options = {
                 key: process.env.REACT_APP_RAZORPAY_KEY_ID,
                 amount: razorpayOrderData.amount,
@@ -93,11 +84,11 @@ const Payment = () => {
                             razorpay_order_id: response.razorpay_order_id,
                             razorpay_payment_id: response.razorpay_payment_id,
                             razorpay_signature: response.razorpay_signature,
-                        }, {headers: {
-                            Authorization: `Bearer ${authService.getToken()}`,
-                        }
-                    });
-
+                        }, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            }
+                        });
                         if (verifyRes.status === 200) {
                             // Update order status to paid
                             await axios.put(
@@ -112,11 +103,10 @@ const Payment = () => {
                                 },
                                 {
                                     headers: {
-                                        Authorization: `Bearer ${authService.getToken()}`,
+                                        Authorization: `Bearer ${token}`,
                                     }
                                 }
                             );
-                            
                             setSuccess('Payment verified successfully!');
                         } else {
                             setError('Payment verification failed.');
@@ -134,39 +124,32 @@ const Payment = () => {
                     color: '#1976d2'
                 }
             };
-
             const paymentObject = new window.Razorpay(options);
             paymentObject.open();
         } catch (err) {
             console.error('Payment initiation error:', err);
             setError('Payment failed to initiate. Please try again.');
         }
-
         setLoading(false);
     };
-
     return (
         <Container maxWidth="md">
             <Box sx={{ py: 8 }}>
                 <GradientHeading variant="h2" gutterBottom>
                     Payment
                 </GradientHeading>
-
                 <Paper elevation={3} sx={{ p: 4, mb: 4 }}>
                     <Typography variant="h6" gutterBottom>
                         Order Summary
                     </Typography>
                     <Typography>Amount: ₹{orderInfo?.amount}</Typography>
                 </Paper>
-
                 <Paper elevation={3} sx={{ p: 4 }}>
                     <Typography variant="h6" gutterBottom>
                         Payment Methods
                     </Typography>
-
                     {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
                     {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
-
                     <Button
                         variant="contained"
                         color="primary"
