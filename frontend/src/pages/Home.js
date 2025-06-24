@@ -5,6 +5,7 @@ import VideoSection from '../components/VideoSection';
 import StemCellInfo from '../components/StemCellInfo';
 import Testimonials from '../components/Testimonials';
 import WhatsAppButton from '../components/WhatsAppButton';
+import ChatbotFab from '../components/ChatbotFab';
 import { Box } from '@mui/material';
 import Footer from '../components/Footer';
 
@@ -17,8 +18,10 @@ const Home = () => {
             <StemCellInfo />
             <Testimonials />
             <WhatsAppButton />
-        </Box><Footer /></>
+        </Box>
+        <ChatbotFab />
+        <Footer /></>
     );
 };
 
-export default Home; 
+export default Home;

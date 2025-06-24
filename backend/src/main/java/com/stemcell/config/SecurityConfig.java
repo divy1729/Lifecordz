@@ -29,7 +29,7 @@ public class SecurityConfig {
 
     private final JwtTokenUtil jwtTokenUtil;
 
-    @Value("#{'${app.allowed.origins:http://localhost:3000,http://localhost:3001}'.split(',')}")
+    @Value("#{'${app.allowed.origins:http://localhost:3000,http://localhost:3001,http://localhost}'.split(',')}")
     private List<String> allowedOrigins;
 
     @Bean
@@ -42,7 +42,8 @@ public class SecurityConfig {
                     "/api/auth/**",
                     "/v3/api-docs/**",
                     "/swagger-ui/**",
-                    "/swagger-ui.html"
+                    "/swagger-ui.html",
+                    "/api/ai/**" // Allow AI endpoints without authentication
                 ).permitAll()
                 // Allow unauthenticated access to static resources
                 .requestMatchers("/static/**", "/favicon.ico", "/error").permitAll()

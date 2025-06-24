@@ -1,0 +1,35 @@
+services:
+  # mongo:
+  #   image: mongo:6
+  #   container_name: mongo
+  #   restart: always
+  #   ports:
+  #     - "27017:27017"
+  #   environment:
+  #     MONGO_INITDB_DATABASE: stemcell_db
+
+  backend:
+    build: ./backend
+    container_name: backend
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      MONGODB_URI: ${MONGODB_URI}
+      JWT_SECRET: ${JWT_SECRET}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      RAZORPAY_KEYID: ${RAZORPAY_KEYID}
+      RAZORPAY_KEYSECRET: ${RAZORPAY_KEYSECRET}
+      GROQ_API_KEY: ${GROQ_API_KEY} 
+    # depends_on:
+    #   - mongo
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend

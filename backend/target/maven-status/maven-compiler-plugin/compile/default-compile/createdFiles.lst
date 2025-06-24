@@ -18,6 +18,7 @@ com/stemcell/dto/LoginRequest.class
 com/stemcell/model/Sample.class
 com/stemcell/controller/TestController.class
 com/stemcell/security/JwtAuthenticationFilter.class
+com/stemcell/controller/AIController.class
 com/stemcell/controller/UserController.class
 com/stemcell/service/TechnicianService.class
 com/stemcell/security/CustomUserDetails.class
