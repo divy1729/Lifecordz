@@ -4,6 +4,8 @@
 *.env
 # Ignore node_modules and build output for frontend
 frontend/node_modules/
+frontend/node_modules/.cache/
+
 frontend/build/
 # Ignore Maven/Java build output for backend
 backend/target/

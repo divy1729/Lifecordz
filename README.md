@@ -84,10 +84,6 @@ frontend/  # React app
 3. Commit your changes
 4. Push to your fork and open a Pull Request
 
-<<<<<<< HEAD
-
-=======
->>>>>>> f16831f1d94af969c607c1ecc696f370da2e1b43
 
 ---
 
