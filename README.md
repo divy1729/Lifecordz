@@ -17,6 +17,14 @@ Lifecordz is a full-stack web application for managing stem cell banking operati
 - RESTful APIs (Spring Boot)
 - Modern React frontend (Material UI)
 
+## Homepage
+  <img width="1451" alt="home" src="https://github.com/user-attachments/assets/53b5dd50-030f-4712-a225-fb35c552c5b4" />
+
+## Admin-Dashboard
+ <img width="1452" alt="admindash" src="https://github.com/user-attachments/assets/00ef240f-a0d9-4689-aa59-08eace9ea3ba" />
+
+
+
 ## Tech Stack
 
 - **Backend:** Java, Spring Boot, Spring Security, MongoDB, JWT, Razorpay
@@ -76,7 +84,10 @@ frontend/  # React app
 3. Commit your changes
 4. Push to your fork and open a Pull Request
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> f16831f1d94af969c607c1ecc696f370da2e1b43
 
 ---
 
