@@ -101,7 +101,7 @@ const Payment = () => {
                         if (verifyRes.status === 200) {
                             // Update order status to paid
                             await axios.put(
-                                `/api/orders/${createdOrder.id}/status`,
+                                `${API_BASE}/orders/${createdOrder.id}/status`,
                                 {
                                     status: 'paid',
                                     paymentDetails: {

@@ -38,6 +38,8 @@ const Register = () => {
   });
   const [otp, setOtp] = useState('');
 
+  const API_BASE = process.env.REACT_APP_API_URL?.replace(/\/$/, "");
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -47,20 +49,16 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const payload = { ...formData };
-    // Remove unused optional fields
     if (formData.role !== 'DOCTOR') delete payload.specialty;
     if (formData.role !== 'COURIER') delete payload.vehicleInfo;
     if (formData.role !== 'TECHNICIAN') delete payload.licenseNumber;
-
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/register`, {
+      const response = await fetch(`${API_BASE}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-
       if (response.ok) {
         setActiveStep(1);
       } else {
@@ -76,19 +74,16 @@ const Register = () => {
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/verify-otp?email=${encodeURIComponent(formData.email)}&otp=${encodeURIComponent(otp)}`, {
+      const response = await fetch(`${API_BASE}/auth/verify-otp?email=${encodeURIComponent(formData.email)}&otp=${encodeURIComponent(otp)}`, {
         method: "POST",
       });
-
       if (!response.ok) {
         const errorData = await response.json();
         alert(errorData.message || "OTP verification failed.");
         return;
       }
-
       const loginData = await login(formData.email, formData.password);
       const role = loginData?.user?.role?.toLowerCase();
-
       if (role === 'admin') {
         navigate('/admin-dashboard');
       } else if (role === 'doctor') {

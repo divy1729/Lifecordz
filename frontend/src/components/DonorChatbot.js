@@ -27,7 +27,7 @@ const DonorChatbot = ({ dialogMode }) => {
       const history = messages.length > 0 && messages[0].sender === 'bot' && messages[0].text.startsWith('Hi!')
         ? messages.slice(1)
         : messages;
-      const response = await axios.post(API_BASE, {
+      const response = await axios.post(`${API_BASE}/ai/donor-query`, {
         query: input,
         history: Array.isArray(history) ? history : []
       });
