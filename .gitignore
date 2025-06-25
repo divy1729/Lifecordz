@@ -1,0 +1,18 @@
+# Global .gitignore for Lifecordz project
+# Ignore environment and sensitive files
+.env
+*.env
+# Ignore node_modules and build output for frontend
+frontend/node_modules/
+frontend/node_modules/.cache/
+
+frontend/build/
+# Ignore Maven/Java build output for backend
+backend/target/
+# Ignore IDE/editor files
+*.log
+.DS_Store
+.idea/
+.vscode/
+# Ignore sensitive Spring Boot config
+backend/src/main/resources/application.properties
