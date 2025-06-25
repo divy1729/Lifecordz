@@ -15,4 +15,4 @@ backend/target/
 .idea/
 .vscode/
 # Ignore sensitive Spring Boot config
-backend/src/main/resources/application.properties
+
