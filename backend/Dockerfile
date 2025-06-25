@@ -1,11 +1,12 @@
-# Use OpenJDK image for Spring Boot
-FROM openjdk:21-jdk-slim
+# Stage 1: Build the JAR
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
-# Use the correct JAR name built by Maven
-COPY target/stem-cell-banking-1.0.0.jar app.jar
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Expose the port your Spring Boot app runs on
+# Stage 2: Run the JAR
+FROM eclipse-temurin:21-jre
+WORKDIR /app
+COPY --from=build /app/target/stem-cell-banking-1.0.0.jar app.jar
 EXPOSE 8081
-
-# Use environment variables for secrets (already set in application.properties)
 ENTRYPOINT ["java", "-jar", "app.jar"]
