@@ -31,7 +31,8 @@ const DonorChatbot = ({ dialogMode }) => {
         question: input,
         history: Array.isArray(history) ? history : []
       });
-      setMessages(msgs => [...msgs, { sender: 'bot', text: response.data.reply }]);
+      // The backend returns { answer: ... },
+      setMessages(msgs => [...msgs, { sender: 'bot', text: response.data.answer }]);
     } catch (error) {
       setMessages(msgs => [...msgs, { sender: 'bot', text: 'Sorry, there was an error. Please try again.' }]);
       console.error('Error in chatbot:', error);
