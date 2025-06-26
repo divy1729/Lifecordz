@@ -28,7 +28,7 @@ const DonorChatbot = ({ dialogMode }) => {
         ? messages.slice(1)
         : messages;
       const response = await axios.post(`${API_BASE}/ai/donor-query`, {
-        query: input,
+        question: input,
         history: Array.isArray(history) ? history : []
       });
       setMessages(msgs => [...msgs, { sender: 'bot', text: response.data.reply }]);
