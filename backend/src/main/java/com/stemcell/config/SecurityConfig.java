@@ -47,7 +47,8 @@ public class SecurityConfig {
                 ).permitAll()
                 // Allow unauthenticated access to static resources
                 .requestMatchers("/static/**", "/favicon.ico", "/error").permitAll()
-                .requestMatchers("/api/orders/**").hasAnyRole("USER", "ADMIN", "DONOR") // Allow PUT /api/orders/{id}/status for USER, ADMIN, and DONOR roles
+                // Allow PUT /orders/{id}/status for USER, ADMIN, and DONOR roles
+                .requestMatchers("/api/orders/**").hasAnyRole("USER", "ADMIN", "DONOR")
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/api/doctor/**").hasRole("DOCTOR")
                 .requestMatchers("/api/courier/**").hasRole("COURIER")
