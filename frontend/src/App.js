@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { Box } from '@mui/material';
@@ -24,8 +24,14 @@ import DoctorDashboard from './pages/DoctorDashboard';
 import TechnicianDashboard from './pages/TechnicianDashboard';
 import SupportDashboard from './pages/SupportDashboard';
 import CourierDashboard from './pages/CourierDashboard';
+import axios from 'axios';
 
 const App = () => {
+    useEffect(() => {
+        const API_BASE = process.env.REACT_APP_API_URL?.replace(/\/$/, "");
+        axios.get(`${API_BASE}/health`).catch(() => {});
+    }, []);
+
     return (
         <ThemeProvider>
             <CssBaseline />
